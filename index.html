@@ -38,8 +38,8 @@
     .hero span{color:var(--primary)}
 
     .carousel{margin:0 auto 30px;max-width:720px;position:relative}
-    .carousel-item{display:none;position:relative;border-radius:22px;overflow:hidden;height:360px;border:1px solid #1e293b}
-    .carousel-item.active{display:block}
+    .carousel-item{position:absolute;inset:0;border-radius:22px;overflow:hidden;height:360px;border:1px solid #1e293b;opacity:0;transition:opacity .8s ease;pointer-events:none}
+    .carousel-item.active{opacity:1;pointer-events:auto;position:relative}
 
     .carousel-item img{width:100%;height:100%;object-fit:cover;filter:brightness(.55)}
 
@@ -67,6 +67,10 @@
     #whats{position:fixed;bottom:25px;right:25px;background:#22c55e;color:white;padding:16px;border-radius:50%;font-size:22px;box-shadow:0 10px 25px rgba(0,0,0,.5)}
 
     @media(max-width:900px){.menu-btn{display:block}.hero h1{font-size:2.1rem}.carousel-item{height:300px}}
+
+    .carousel-dots{display:flex;justify-content:center;gap:10px;margin-top:15px}
+    .carousel-dots span{width:10px;height:10px;border-radius:50%;background:#334155;cursor:pointer;transition:.3s}
+    .carousel-dots span.active{background:var(--primary)}.hero h1{font-size:2.1rem}.carousel-item{height:300px}}
   </style>
 </head>
 <body>
@@ -80,53 +84,61 @@
   <a href="#atuacao" onclick="toggleMenu()">Área de atuação</a>
   <a href="#missao" onclick="toggleMenu()">Missão</a>
   <a href="#contato" onclick="toggleMenu()">Contato</a>
-</div>
+</a>
 
 <header>
-  <div class="logo">Dr. João Silva • OAB/SP 000000</div>
-  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  <div class="logo">Dr. João Silva • OAB/SP 000000</a>
+
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
 </header>
 
 <section class="hero" id="inicio">
 
-  <div class="carousel">
-    <div class="carousel-item active">
+  <div class="carousel" style="position:relative;">
+    <a href="#atuacao" class="carousel-item active">
       <img src="https://images.unsplash.com/photo-1528740561666-dc2479dc08ab" alt="Direito Civil">
       <div class="carousel-content">
         <i class="fas fa-balance-scale"></i>
         <h3>Direito Civil</h3>
         <p>Contratos, família, indenizações e responsabilidade civil.</p>
-      </div>
-    </div>
+      </a>
 
-    <div class="carousel-item">
+</a>
+
+<a href="#atuacao" class="carousel-item">
       <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216" alt="Direito Trabalhista">
       <div class="carousel-content">
         <i class="fas fa-briefcase"></i>
         <h3>Direito Trabalhista</h3>
         <p>Defesa estratégica de empregados e empregadores.</p>
-      </div>
-    </div>
+      </a>
 
-    <div class="carousel-item">
+</a>
+
+<a href="#atuacao" class="carousel-item">
       <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf" alt="Direito Empresarial">
       <div class="carousel-content">
         <i class="fas fa-building"></i>
         <h3>Direito Empresarial</h3>
         <p>Consultoria jurídica e proteção patrimonial.</p>
-      </div>
-    </div>
+      </a>
 
-    <div class="carousel-item">
+</a>
+
+<a href="#atuacao" class="carousel-item">
       <img src="https://images.unsplash.com/photo-1555375771-14b2a63968a9" alt="Direito Previdenciário">
       <div class="carousel-content">
         <i class="fas fa-user-shield"></i>
         <h3>Direito Previdenciário</h3>
         <p>Aposentadorias, benefícios e planejamento previdenciário.</p>
-      </div>
-    </div>
-  </div>
-  
+      </a>
+
+</a>
+
+<div class="carousel-dots"></a>
+
+</a>
+
 </section>
 
 <section id="quem-somos">
@@ -137,11 +149,16 @@
 <section id="atuacao">
   <h2>Áreas de atuação</h2>
   <div class="grid">
-    <div class="card"><i class="fas fa-balance-scale"></i><h3>Direito Civil</h3><p>Contratos, indenizações, família e responsabilidade civil.</p></div>
-    <div class="card"><i class="fas fa-briefcase"></i><h3>Direito Trabalhista</h3><p>Reclamações trabalhistas e defesa empresarial.</p></div>
-    <div class="card"><i class="fas fa-building"></i><h3>Direito Empresarial</h3><p>Consultoria jurídica e prevenção de riscos.</p></div>
-    <div class="card"><i class="fas fa-user-shield"></i><h3>Direito Previdenciário</h3><p>Benefícios, aposentadorias e revisões.</p></div>
-  </div>
+    <div class="card"><i class="fas fa-balance-scale"></i><h3>Direito Civil</h3><p>Contratos, indenizações, família e responsabilidade civil.</p></a>
+
+<div class="card"><i class="fas fa-briefcase"></i><h3>Direito Trabalhista</h3><p>Reclamações trabalhistas e defesa empresarial.</p></a>
+
+<div class="card"><i class="fas fa-building"></i><h3>Direito Empresarial</h3><p>Consultoria jurídica e prevenção de riscos.</p></a>
+
+<div class="card"><i class="fas fa-user-shield"></i><h3>Direito Previdenciário</h3><p>Benefícios, aposentadorias e revisões.</p></a>
+
+</a>
+
 </section>
 
 <section id="missao">
@@ -176,13 +193,32 @@ function enviarWhats(e){
 }
 
 const items = document.querySelectorAll('.carousel-item');
+const dotsContainer = document.querySelector('.carousel-dots');
 let index = 0;
-setInterval(()=>{
+
+items.forEach((_, i)=>{
+  const dot = document.createElement('span');
+  if(i===0) dot.classList.add('active');
+  dot.addEventListener('click',()=>showSlide(i));
+  dotsContainer.appendChild(dot);
+});
+
+const dots = document.querySelectorAll('.carousel-dots span');
+
+function showSlide(i){
   items[index].classList.remove('active');
-  index = (index + 1) % items.length;
+  dots[index].classList.remove('active');
+  index = i;
   items[index].classList.add('active');
+  dots[index].classList.add('active');
+}
+
+setInterval(()=>{
+  let next = (index + 1) % items.length;
+  showSlide(next);
 }, 4000);
 </script>
 
 </body>
-</html>
+  </html>
+  
